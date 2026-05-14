@@ -1,9 +1,11 @@
-/** @type {import('next').NextConfig} */
+const isProd = true;
+const useCustomDomain = true; // set false if no custom domain
+
 const nextConfig = {
   output: "export",
-  images: {
-    unoptimized: true,
-  },
+  basePath: !useCustomDomain && isProd ? "/portfolio" : "",
+  assetPrefix: !useCustomDomain && isProd ? "/portfolio/" : "",
+  images: { unoptimized: true },
 };
 
 export default nextConfig;
