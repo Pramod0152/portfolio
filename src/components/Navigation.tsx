@@ -1,20 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Terminal, Command } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface NavItem {
-  label: string;
-  href: string;
-}
-
-const navItems: NavItem[] = [
-  { label: "Work", href: "#projects" },
-  { label: "About", href: "#about" },
-  { label: "Stack", href: "#stack" },
-  { label: "Contact", href: "#contact" },
+const navItems = [
+  { label: "Work",    href: "#projects" },
+  { label: "About",   href: "#about"    },
+  { label: "Stack",   href: "#stack"    },
+  { label: "Contact", href: "#contact"  },
 ];
 
 interface NavigationProps {
@@ -23,84 +18,96 @@ interface NavigationProps {
 
 export function Navigation({ onCommandOpen }: NavigationProps) {
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
+  const [active, setActive]     = useState("");
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /* Active section tracking via IntersectionObserver */
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const ids = navItems.map((n) => n.href.slice(1));
+    const observers = ids.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActive(`#${id}`); },
+        { rootMargin: "-40% 0px -55% 0px" }
+      );
+      obs.observe(el);
+      return obs;
+    });
+    return () => observers.forEach((o) => o?.disconnect());
+  }, []);
+
+  /* ⌘K shortcut */
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         onCommandOpen();
       }
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
   }, [onCommandOpen]);
 
   return (
     <motion.header
-      initial={{ y: -20, opacity: 0 }}
+      initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        "fixed top-0 inset-x-0 z-50 transition-all duration-200",
         scrolled
-          ? "bg-background/80 backdrop-blur-xl border-b border-border/50"
+          ? "border-b border-border/70 bg-background/85 backdrop-blur-xl"
           : "bg-transparent"
       )}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <a href="/" className="flex items-center gap-2 group">
-            <div className="w-7 h-7 rounded-md bg-accent/10 border border-accent/20 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-              <Terminal className="w-3.5 h-3.5 text-accent" />
-            </div>
-            <span className="font-mono text-sm font-medium text-foreground/80 group-hover:text-foreground transition-colors">
-              Pramod Ghimire
-              <span className="text-accent">.</span>
-              dev
-            </span>
-          </a>
+      <div className="max-w-6xl mx-auto px-6 lg:px-8 flex items-center justify-between h-14">
 
-          {/* Nav links — desktop */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "px-3 py-1.5 text-sm rounded-md transition-all duration-150",
-                  "text-muted-foreground hover:text-foreground hover:bg-muted/50",
-                  activeSection === item.href && "text-foreground bg-muted/50"
-                )}
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
+        {/* ── Logo / identity ── */}
+        <a href="/" className="flex items-center gap-2.5 group">
+          <div className="w-6 h-6 rounded border border-accent/30 bg-accent/8 flex items-center justify-center group-hover:border-accent/60 transition-colors">
+            <Terminal className="w-3 h-3 text-accent" />
+          </div>
+          <span className="font-mono text-xs text-muted-foreground group-hover:text-foreground transition-colors tracking-wide">
+            pramod<span className="text-accent">.</span>dev
+          </span>
+          {/* Live dot */}
+          {/* <span className="status-live text-[10px] font-mono text-success hidden sm:inline-flex">
+            available
+          </span> */}
+        </a>
 
-          {/* Right: Command palette button */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={onCommandOpen}
+        {/* ── Nav links ── */}
+        <nav className="hidden md:flex items-center gap-6">
+          {navItems.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
               className={cn(
-                "flex items-center gap-2 px-3 py-1.5 rounded-md border border-border/60",
-                "text-sm text-muted-foreground bg-muted/30",
-                "hover:border-border hover:text-foreground hover:bg-muted/60",
-                "transition-all duration-150"
+                "text-xs font-mono tracking-wide transition-colors duration-150",
+                active === item.href
+                  ? "text-accent"
+                  : "text-muted-foreground hover:text-foreground"
               )}
             >
-              <Command className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline text-xs">⌘K</span>
-            </button>
-          </div>
-        </div>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
+        {/* ── ⌘K button ── */}
+        <button
+          onClick={onCommandOpen}
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded border border-border/60 bg-muted/20 text-muted-foreground hover:text-foreground hover:border-border transition-all text-xs font-mono"
+        >
+          <Command className="w-3 h-3" />
+          <span className="hidden sm:inline">⌘K</span>
+        </button>
       </div>
     </motion.header>
   );

@@ -1,203 +1,206 @@
 // ============================================================
-// data/projects.ts — Single Source of Truth for All Projects
+// data/projects.ts — Real work & side projects
 // ============================================================
 
 import { Project } from "@/types/project";
 
 export const projects: Project[] = [
+  // ── Current Work ─────────────────────────────────────────
   {
     id: "taasnet-001",
-    title: "TaasNet",
-    subtitle: "AI-Powered Talent Marketplace & Ecosystem",
-    category: "Full-Stack / AI / Microservices",
+    title: "TaaSNet",
+    subtitle: "AI-Powered Talent & Services Marketplace",
+    category: "Backend / NestJS",
+    projectType: "work",
     status: "Production",
     featured: true,
-    year: 2024,
-    techStack: ["NestJS", "React", "TCP Microservices", "Gemini AI", "Redis", "WebSockets", "PostgreSQL", "Docker"],
-    metrics: {
-      latency: "< 100ms",
-      uptime: "99.9%",
-      scaling: "Horizontally Scalable",
-    },
+    year: 2025,
+    techStack: [
+      "NestJS",
+      "TypeScript",
+      "LangGraph",
+      "OpenAI",
+      "Gemini",
+      "WebSockets",
+      "Agora",
+      "ZegoCloud",
+      "Stripe Connect",
+      "PostgreSQL",
+      "MySQL",
+      "Sequelize ORM",
+      "Firebase",
+      "Redis",
+    ],
+    metrics: {},
     content: {
       problem:
-        "Traditional talent marketplaces lack real-time interaction, personalized AI guidance, and the infrastructure to handle high-frequency service-card interactions without degraded UX.",
+        "TaaSNet needed a backend that could simultaneously handle real-time video/audio calls, multi-step AI workflows, payment billing, and live platform analytics — each with different reliability and latency requirements.",
       solution:
-        "Built a distributed system using NestJS microservices and TCP transport to handle high-frequency service card interactions and AI-twin real-time bookings. Each service domain is independently deployable and communicates over a typed TCP message bus.",
+        "Built and maintained core RESTful APIs in NestJS with Sequelize ORM across MySQL and PostgreSQL. Designed stateful AI features and multi-step workflows using LangGraph to orchestrate OpenAI and Gemini calls. Integrated Agora and ZegoCloud for live video/audio communication and Stripe Connect for payment flows.",
       technical_highlights: [
-        "Implemented CQRS pattern for service-card state management, separating read/write paths for optimal query performance.",
-        "Integrated Gemini for RAG-based AI twin interactions with vector similarity search over talent profiles.",
-        "Custom WebSocket gateway with Redis pub/sub for real-time town hall streaming and presence tracking.",
-        "Event-sourced booking saga with distributed transaction compensation for atomic multi-service operations.",
-      ],
-      architecture_notes:
-        "API Gateway → Service Registry (Consul) → [Auth | Talent | Booking | AI] Microservices → Event Bus (Redis Streams) → PostgreSQL per domain",
-    },
-    media: {
-      thumbnail: "/projects/taasnet/hero.png",
-      videoDemo: "/projects/taasnet/demo.mp4",
-      gallery: [
-        { url: "/projects/taasnet/architecture.svg", caption: "System Architecture Diagram", type: "diagram" },
-        { url: "/projects/taasnet/dashboard.png", caption: "Admin Control Panel", type: "screenshot" },
+        "Stateful multi-step AI workflows built with LangGraph — structured data processing beyond basic single-turn API calls.",
+        "Real-time feature layer using WebSockets and Firebase for presence, messaging, and live updates.",
+        "Backend integration for Agora and ZegoCloud: signalling, room management, and event handling.",
+        "Stripe Connect billing flows: payment split between platform and service providers.",
+        "Centralized logging and monitoring setup to catch regressions before they reach users.",
+        "Backend logic for an admin analytics dashboard displaying live platform metrics.",
       ],
     },
     links: {
       live: "https://taasnet.com",
-      github: "https://github.com/Pramod0152/taasnet",
-      docs: "https://api.taasnet.com/swagger",
     },
   },
+
+  // ── Side Projects ─────────────────────────────────────────
   {
-    id: "nexus-api-002",
-    title: "Nexus API Gateway",
-    subtitle: "High-Throughput Microservice Orchestration Layer",
+    id: "notify-002",
+    title: "Multi-Channel Notification System",
+    subtitle: "Production-Ready Delivery Microservice",
     category: "Backend / NestJS",
+    projectType: "side",
     status: "Production",
     featured: true,
     year: 2024,
-    techStack: ["NestJS", "gRPC", "Redis", "Kubernetes", "Prometheus", "Kong", "TypeScript"],
-    metrics: {
-      latency: "< 12ms p99",
-      throughput: "50k req/s",
-      uptime: "99.95%",
-    },
+    techStack: [
+      "NestJS",
+      "TypeScript",
+      "BullMQ",
+      "Redis",
+      "Sequelize ORM",
+      "PostgreSQL",
+      "SendGrid",
+      "Twilio",
+    ],
+    metrics: {},
     content: {
       problem:
-        "Cross-cutting concerns (auth, rate-limiting, logging, circuit-breaking) were duplicated across 12+ microservices, creating maintenance overhead and inconsistent enforcement.",
+        "Needed a reusable notification service that could deliver messages across Email, SMS, and WhatsApp through a single unified API — without coupling delivery logic to calling services.",
       solution:
-        "Designed a centralized API Gateway in NestJS that handles all cross-cutting concerns via composable interceptors and guards, exposing a unified GraphQL + REST surface.",
+        "Built a notification microservice with a channel registry pattern, async queue-based delivery via BullMQ, and an append-only audit log. Workers own all delivery state transitions keeping HTTP response times independent of third-party latency.",
       technical_highlights: [
-        "Custom NestJS interceptor pipeline for request tracing (OpenTelemetry) with zero-overhead sampling.",
-        "Token-bucket rate limiter backed by Redis Lua scripts for atomic, distributed enforcement.",
-        "Circuit-breaker pattern with exponential back-off for downstream service resilience.",
-        "gRPC multiplexing for internal service-to-service communication reducing serialization overhead by 60%.",
-      ],
-    },
-    media: {
-      thumbnail: "/projects/nexus/hero.png",
-      gallery: [
-        { url: "/projects/nexus/architecture.svg", caption: "Gateway Architecture", type: "diagram" },
-        { url: "/projects/nexus/metrics.png", caption: "Prometheus Dashboard", type: "screenshot" },
+        "Channel registry pattern: new delivery channels (e.g. push notifications) can be added without touching existing code.",
+        "Async queue-based delivery via BullMQ with exponential-backoff retries (3 attempts, 2s base delay).",
+        "Append-only audit log using a self-referential PostgreSQL table — every delivery attempt is recorded with its status, error, and provider message ID.",
+        "Workers own all delivery-state transitions (QUEUED → WAITING → SENT / FAILED), keeping HTTP response times fast.",
+        "Supports SendGrid dynamic templates and Twilio WhatsApp Content Templates alongside plain HTML/text.",
       ],
     },
     links: {
-      github: "https://github.com/Pramod0152/nexus-gateway",
-      docs: "https://docs.nexus.dev",
+      github: "https://github.com/Pramod0152",
     },
   },
   {
-    id: "clearview-003",
-    title: "ClearView Analytics",
-    subtitle: "Real-Time Data Visualization Platform for B2B SaaS",
+    id: "chat-003",
+    title: "Distributed Real-Time Chat",
+    subtitle: "Scalable Fault-Tolerant Chat System",
+    category: "Backend / NestJS",
+    projectType: "side",
+    status: "Production",
+    featured: true,
+    year: 2024,
+    techStack: [
+      "NestJS",
+      "TypeScript",
+      "WebSockets",
+      "Redis",
+      "BullMQ",
+      "PostgreSQL",
+      "LangGraph",
+      "Docker",
+      "Nginx",
+    ],
+    metrics: {},
+    content: {
+      problem:
+        "Designing a chat system that scales horizontally requires solving cross-instance messaging, write-path reliability, and AI agent integration — all without blocking the real-time message loop.",
+      solution:
+        "WebSocket-based real-time messaging with Redis Pub/Sub for cross-instance communication. BullMQ offloads writes to ensure eventual consistency. LangGraph AI agent is integrated via async workflows — zero blocking on the chat loop.",
+      technical_highlights: [
+        "Redis Pub/Sub for cross-instance message fan-out and presence tracking with TTL-based heartbeat.",
+        "Queue-driven write path (BullMQ) to decouple persistence from the real-time delivery loop.",
+        "Decoupled LangGraph AI agent integration via async workflows — AI responses don't block chat.",
+        "Designed for horizontal scale with clear separation of concerns and graceful failure handling.",
+        "Nginx reverse proxy + Docker Compose for local multi-instance testing.",
+      ],
+      architecture_notes:
+        "Client ↔ WS Gateway → Redis Pub/Sub → [all WS instances]\nWrite path: WS → BullMQ → DB Worker → PostgreSQL\nAI path: BullMQ → LangGraph agent → response queue → WS",
+    },
+    links: {
+      github: "https://github.com/Pramod0152",
+    },
+  },
+  {
+    id: "lms-004",
+    title: "Online Learning Platform",
+    subtitle: "Full-Stack Course Management System",
     category: "Full-Stack / MERN",
+    projectType: "side",
     status: "Production",
-    featured: true,
-    year: 2023,
-    techStack: ["React", "Node.js", "MongoDB", "Express", "D3.js", "Socket.IO", "AWS S3", "Bull Queue"],
-    metrics: {
-      users: "2,400+ active",
-      latency: "< 200ms",
-      uptime: "99.8%",
-    },
-    content: {
-      problem:
-        "B2B clients needed live operational dashboards but existing BI tools were too expensive, rigid, and couldn't ingest custom event streams from proprietary data sources.",
-      solution:
-        "Built a full MERN stack platform with drag-and-drop dashboard builder, custom chart library on D3, and a multi-tenant ingestion pipeline using Bull queues for reliable asPramod Ghimirec processing.",
-      technical_highlights: [
-        "Multi-tenant data isolation with MongoDB collection namespacing and field-level encryption.",
-        "Drag-and-drop widget system with React DnD Kit and persisted layout via JSON serialization.",
-        "Custom D3 chart components with React reconciliation wrapper for smooth transitions.",
-        "Bull queue for asPramod Ghimirec data ingestion with retry logic and dead-letter queue monitoring.",
-      ],
-    },
-    media: {
-      thumbnail: "/projects/clearview/hero.png",
-      gallery: [
-        { url: "/projects/clearview/dashboard.png", caption: "Live Dashboard Builder", type: "screenshot" },
-        { url: "/projects/clearview/pipeline.svg", caption: "Ingestion Pipeline", type: "diagram" },
-      ],
-    },
-    links: {
-      live: "https://clearview-app.com",
-      github: "https://github.com/Pramod0152/clearview",
-    },
-  },
-  {
-    id: "shipfast-004",
-    title: "ShipFast CLI",
-    subtitle: "Developer Toolchain for NestJS Microservice Scaffolding",
-    category: "Open Source",
-    status: "Beta",
     featured: false,
-    year: 2024,
-    techStack: ["Node.js", "TypeScript", "Commander.js", "Handlebars", "Plop", "NPM"],
-    metrics: {
-      users: "800+ installs",
-      scaling: "CLI + VSCode Extension",
-    },
+    year: 2023,
+    techStack: [
+      "Node.js",
+      "React",
+      "MongoDB",
+      "Express",
+      "JWT",
+      "Word2Vec",
+    ],
+    metrics: {},
     content: {
       problem:
-        "Setting up a new NestJS microservice with CQRS, proper module structure, DTOs, and Swagger docs took 2+ hours of boilerplate work per service.",
+        "Needed a full-stack platform to manage course delivery, user subscriptions, and personalized content recommendations — built as a complete system from auth to recommendation engine.",
       solution:
-        "Built an opinionated CLI that scaffolds production-ready NestJS microservices in under 60 seconds with CQRS, Swagger, validation pipes, and Docker configs pre-wired.",
+        "Full-stack application with role-based auth (admin/student), course CRUD management, multimedia content delivery, and a Word2Vec-powered recommendation engine for personalized course suggestions.",
       technical_highlights: [
-        "Handlebars-based code generation with custom helpers for pluralization and case transformations.",
-        "Interactive Inquirer.js wizard for selecting features (CQRS, gRPC, REST, hybrid) during scaffold.",
-        "AST-based code injection to update AppModule imports without overwriting existing code.",
-        "Companion VSCode extension for in-editor scaffolding via command palette.",
-      ],
-    },
-    media: {
-      thumbnail: "/projects/shipfast/hero.png",
-      gallery: [
-        { url: "/projects/shipfast/cli.png", caption: "CLI Scaffold Wizard", type: "screenshot" },
+        "Role-based authentication and authorization: admin and student permission tiers.",
+        "Course lifecycle management: creation, updates, deletions, and user subscriptions.",
+        "Personalized course recommendations using Word2Vec on course content and user history.",
+        "Responsive multimedia content delivery with progress tracking per user.",
       ],
     },
     links: {
-      github: "https://github.com/Pramod0152/shipfast-cli",
-      docs: "https://shipfast.dev",
-      live: "https://www.npmjs.com/package/shipfast-cli",
+      github: "https://github.com/Pramod0152",
     },
   },
   {
     id: "vaultauth-005",
     title: "VaultAuth",
-    subtitle: "Zero-Trust Identity & Access Management Service",
+    subtitle: "OAuth2 / PKCE Identity & Access Service",
     category: "Backend / NestJS",
-    status: "Production",
+    projectType: "side",
+    status: "Beta",
     featured: false,
-    year: 2023,
-    techStack: ["NestJS", "JWT", "OAuth2", "PKCE", "Redis", "PostgreSQL", "TypeORM", "Argon2"],
-    metrics: {
-      latency: "< 50ms token verify",
-      uptime: "99.99%",
-      users: "Supports 10k+ sessions",
-    },
+    year: 2024,
+    techStack: [
+      "NestJS",
+      "TypeScript",
+      "JWT",
+      "OAuth2",
+      "PKCE",
+      "Redis",
+      "PostgreSQL",
+      "TypeORM",
+      "Argon2",
+    ],
+    metrics: {},
     content: {
       problem:
-        "Needed a reusable, auditable auth service that could plug into multiple internal products with fine-grained RBAC, refresh token rotation, and device tracking.",
+        "Auth logic was scattered across multiple personal projects. Built a standalone, reusable IAM service as a learning project in OAuth2 security patterns.",
       solution:
-        "Built a standalone NestJS OAuth2-compliant IAM service with PKCE support, refresh token family rotation to prevent replay attacks, and a React admin console for role management.",
+        "Standalone NestJS OAuth2-compliant IAM service with PKCE support for SPA clients, refresh token family rotation to prevent replay attacks, and fine-grained RBAC.",
       technical_highlights: [
-        "OAuth2 Authorization Code flow with PKCE for SPA clients — no implicit flow.",
-        "Refresh token family rotation: detecting token reuse invalidates the entire token family.",
+        "OAuth2 Authorization Code flow with PKCE — no implicit flow, SPA-safe.",
+        "Refresh token family rotation: token reuse detection invalidates the entire family.",
         "Fine-grained RBAC with policy-as-data stored in PostgreSQL and cached in Redis.",
-        "Argon2id password hashing with configurable work factor for forward-compatibility.",
-      ],
-    },
-    media: {
-      thumbnail: "/projects/vaultauth/hero.png",
-      gallery: [
-        { url: "/projects/vaultauth/flow.svg", caption: "OAuth2 PKCE Flow Diagram", type: "diagram" },
+        "Argon2id password hashing with configurable work factor.",
       ],
     },
     links: {
       github: "https://github.com/Pramod0152/vaultauth",
-      docs: "https://vaultauth.dev/docs",
     },
   },
 ];
 
-export const featuredProjects = projects.filter((p) => p.featured);
-export const getProjectById = (id: string) => projects.find((p) => p.id === id);
+export const featuredProjects  = projects.filter((p) => p.featured);
+export const getProjectById    = (id: string) => projects.find((p) => p.id === id);

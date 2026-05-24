@@ -6,9 +6,6 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -20,45 +17,32 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         accent: {
-          DEFAULT: "hsl(var(--accent))",
+          DEFAULT:    "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
+          DEFAULT:    "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
         border: "hsl(var(--border))",
         card: {
-          DEFAULT: "hsl(var(--card))",
+          DEFAULT:    "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-      },
-      backgroundImage: {
-        "grid-pattern":
-          "linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px)",
-        "radial-fade":
-          "radial-gradient(ellipse 80% 50% at 50% -20%, hsl(var(--accent) / 0.15), transparent)",
-      },
-      backgroundSize: {
-        grid: "32px 32px",
+        success: "hsl(var(--success))",
       },
       animation: {
-        "fade-in": "fadeIn 0.5s ease forwards",
-        "slide-up": "slideUp 0.5s ease forwards",
-        shimmer: "shimmer 2s linear infinite",
+        "fade-in":  "fadeIn 0.4s ease forwards",
+        "slide-up": "slideUp 0.4s ease forwards",
       },
       keyframes: {
         fadeIn: {
           from: { opacity: "0" },
-          to: { opacity: "1" },
+          to:   { opacity: "1" },
         },
         slideUp: {
-          from: { opacity: "0", transform: "translateY(20px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
-        },
-        shimmer: {
-          from: { backgroundPosition: "0 0" },
-          to: { backgroundPosition: "-200% 0" },
+          from: { opacity: "0", transform: "translateY(14px)" },
+          to:   { opacity: "1", transform: "translateY(0)" },
         },
       },
     },

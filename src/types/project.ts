@@ -1,5 +1,5 @@
 // ============================================================
-// types/project.ts — Centralized Type Definitions
+// types/project.ts
 // ============================================================
 
 export type ProjectStatus =
@@ -16,52 +16,42 @@ export type ProjectCategory =
   | "DevOps / Infrastructure"
   | "Open Source";
 
+export type ProjectType = "work" | "side" | "demo";
+
 export interface ProjectMetrics {
-  latency?: string;
-  uptime?: string;
-  scaling?: string;
-  users?: string;
+  latency?:    string;
+  uptime?:     string;
+  scaling?:    string;
+  users?:      string;
   throughput?: string;
   [key: string]: string | undefined;
 }
 
-export interface ProjectMediaItem {
-  url: string;
-  caption: string;
-  type?: "screenshot" | "diagram" | "video";
-}
-
-export interface ProjectMedia {
-  thumbnail: string;
-  videoDemo?: string;
-  gallery: ProjectMediaItem[];
-}
-
 export interface ProjectLinks {
-  live?: string;
-  github?: string;
-  docs?: string;
-  caseStudy?: string;
+  live?:       string;
+  github?:     string;
+  docs?:       string;
+  caseStudy?:  string;
 }
 
 export interface ProjectContent {
-  problem: string;
-  solution: string;
-  technical_highlights: string[];
-  architecture_notes?: string;
+  problem:               string;
+  solution:              string;
+  technical_highlights:  string[];
+  architecture_notes?:   string;
 }
 
 export interface Project {
-  id: string;
-  title: string;
-  subtitle: string;
-  category: ProjectCategory;
-  status: ProjectStatus;
-  featured: boolean;
-  year?: number;
-  techStack: string[];
-  metrics: ProjectMetrics;
-  content: ProjectContent;
-  media: ProjectMedia;
-  links: ProjectLinks;
+  id:          string;
+  title:       string;
+  subtitle:    string;
+  category:    ProjectCategory;
+  projectType: ProjectType;
+  status:      ProjectStatus;
+  featured:    boolean;
+  year?:       number;
+  techStack:   string[];
+  metrics:     ProjectMetrics;
+  content:     ProjectContent;
+  links:       ProjectLinks;
 }
